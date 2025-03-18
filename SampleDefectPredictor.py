@@ -72,6 +72,11 @@ class PythonMiner(BaseMiner):
             self.get_modified_files()
 
         commit_dates = {commit: self.get_commit_date(commit) for commit in self.python_files.keys()}
+        
+        if not commit_dates:  # Handle empty result
+            print("Not found any modified files in this specific date. Exiting risk calculation.")
+            return risk_scores
+
         sorted_commits = sorted(commit_dates.items(), key=lambda x: x[1])  
         current_rev = max(commit_dates.values())  
 
@@ -81,6 +86,7 @@ class PythonMiner(BaseMiner):
                 risk_scores[file_path] += 1 / (2 ** d) 
 
         return risk_scores
+
 
 class PythonFixingCommitClassifier(FixingCommitClassifier):
     def __init__(self, commit):

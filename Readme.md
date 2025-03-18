@@ -9,69 +9,83 @@ This project provides an implementation of a Defect Predictor by leveraging Repo
 
 # Setup Instructions
 
-## Prerequisites
-- Python version **<3.9**.
-- Git version **>=2.38.0**.
-- Dependencies listed in `requirements.txt`.
 
 ## Installation
 Follow the steps below to set up and run the project:
 
-### 1. Install the required Python libraries
-- Make sure you have Python installed (less than version 3.9). Create a virtual environment using the following commands:
+### 1. Clone the repository
 
 ```bash
-python -m venv myenv
+git clone https://github.ncsu.edu/mmyaka/DefectPredictorTemplate.git
 ```
-- Activate the virtual environment.
-  
-For Linux/macOS:
+- Change the current working directory 
 ```bash
-source myenv/bin/activate
-```
-For windows:
-```bash
-.\myenv\Scripts\activate
-```
-- After activating the environment, use the following command to install the required dependencies:
-```bash
-pip install -r requirements.txt
-```
-- Additionally, download the spaCy statistical model `en_core_web_sm` for use with the `FixingCommitClassifier`:
-```bash
-python -m spacy download en_core_web_sm
+cd DefectPredictorTemplate
 ```
 
-### 2. Update Configuration file
-Provide the repository URL and target clone directory for defect prediction in the config file. For example:
+### 2. Build the docker file
+Create a docker image (see Dockerfile) for the project: 
 ```bash
-url_to_repo = "https://github.com/sample_user/sample_repo.git"
-clone_repo_to = "C:\\path_to_directory"
-branch = "master"
-from_date="YYYY-MM-DD"
-to_date="YYYY-MM-DD"
+docker build -t defect-predictor .
 ```
 
 ### 3. Run the project
-Run the harness function to execute the `PythonMiner` class and generate results:
+Run the docker container from the image. See instruction RUN at the end of Dockerfile. It will execute the harness function within a docker container, print the results, and exit.
 ```bash
-python harness.py
+docker run --rm -it defect-predictor
+```
+  #### Expected output:
+  ```plaintext
+  Retrieving modified Python files...
+  Modified files debug output: {'word_frequency.py'}
+  
+  Comparing with Ground Truth...
+  Total Files in Ground Truth: 1
+  Total Files Predicted by the defect predictor: 1
+  
+  False Positives (Files predicted but not in ground truth):
+  word_frequency.py
+  
+  False Negatives (Files in ground truth but not predicted):
+  factorial.py
+  
+  Precision: 0.00
+  Recall: 0.00
+  F1 Score: 0.00
+  
+  Calculating risk scores...
+  
+  Risk Scores (File Name -> Risk Value):
+  word_frequency.py -> 2.0
+  ```
+
+  ### Explanation of outputs:
+  - **Modified Files**: Lists all Python files that were modified during the specified period, based on the defect predictor analysis.
+  - **Comparison with Ground Truth**: 
+    The comparison is based on a ground truth file, which contains a list of files modified between a start and end date. This ground truth data is compared with the predictions made by the sample defect predictor model to assess its accuracy.
+    - **False Positives**: Files that were predicted by the model but are not in the ground truth.
+    - **False Negatives**: Files that are in the ground truth but were not predicted by the model.
+    - **Precision, Recall, and F1 Score**: Metrics that summarize the prediction accuracy of the model.
+  - **Risk Scores**: Displays the calculated risk scores for each modified file.
+  
+  
+### 4. Login and run 
+Create a docker container and run a bash shell in it. From there, you can modify the file config.json as you wish.
+```bash
+ docker run -it --rm defect-predictor bash
 ```
 
-### 4. Outputs
-- **Modified Files**: Lists all Python files that were modified.
-- **Risk Scores**: Displays the calculated risk scores for each file.
+## Overview of files
 
-### Example Output
-```plaintext
-Retrieving modified Python files...
-Modified files debug output: {'commit_hash1': ['file1.py', 'file2.py'], 'commit_hash2': ['file3.py']}
-
-Calculating risk scores...
-
-Risk Scores (File Name -> Risk Value):
-file1.py -> 1.23
-file2.py -> 0.67
-file3.py -> 2.45
-```
-
+  ### SampleDefectPredictor.py:
+  - This script identifies and lists Python files modified during a specified time frame in a Git repository. Additionally, it calculates a risk score for each file, which can help in prioritizing potential defect analysis. You can customize this script to implement your unique defect prediction model and risk assessment logic.
+  ### harness.py
+  - This script runs the defect predictor (SampleDefectPredictor.py) logic to generate a list of modified files, calculate their risk scores, and compare the results with a ground truth file. Please note that this file should not be modified, as your implementation is expected to function using it as is.
+  ### requirements.txt
+  - Lists all the dependencies and libraries required to run the project seamlessly.
+  ### ground_truth.csv
+  - Provides a reference dataset containing start and end dates along with the modified files. It is used to compare expected results with actual outputs. You can test various scenarios by customizing this file.
+  ### config.json
+  - Allows you to specify the repository to be tested, the local path where it should be cloned, the branch to analyze, and the start and end dates for conducting tests within a specified time frame.
+  ### Docker 
+  - Sets up the necessary environment with Python, Git, dependencies, and your project files to run the defect predictor seamlessly inside a container.
