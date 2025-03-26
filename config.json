@@ -1,7 +1,7 @@
 {
     "url_to_repo": "https://github.com/coinse/GHRB",
     "clone_repo_to": "/app/Testing",
-    "branch": "dev",
+    "branch": "main",
     "from_date": "2024-01-25",
     "to_date": "2024-02-03"
 }

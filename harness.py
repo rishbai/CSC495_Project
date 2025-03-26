@@ -4,6 +4,7 @@ import os
 import json
 import pandas as pd
 
+
 def compare_with_ground_truth(predicted_files, ground_truth_file):
     """
     Compares the output of PythonMiner with the ground truth CSV file.
