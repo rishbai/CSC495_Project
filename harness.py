@@ -22,8 +22,8 @@ def compare_with_ground_truth(predicted_files, ground_truth_file, config_url, co
     # Filter ground truth entries by URL and date range
     mask = (
         (df['github_url'] == config_url) &
-        (config_from >= df['from_date']) &
-        (config_to <= df['to_date'])
+        (config_from == df['from_date']) &
+        (config_to == df['to_date'])
     )
     df_filtered = df[mask]
     
