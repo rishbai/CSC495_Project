@@ -1,7 +1,7 @@
 {
-    "url_to_repo": "https://github.com/coinse/GHRB",
+    "url_to_repo": "https://github.com/manideepika21/whisper.git",
     "clone_repo_to": "/app/Testing",
-    "branch": "dev",
-    "from_date": "2024-01-25",
-    "to_date": "2024-02-03"
+    "branch": "main",
+    "from_date": "2022-09-21",
+    "to_date": "2025-03-23"
 }
