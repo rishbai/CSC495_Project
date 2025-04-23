@@ -1,7 +1,7 @@
 {
-    "url_to_repo": "https://github.com/manideepika21/neuraloperator.git",
+    "url_to_repo": "https://github.com/manideepika21/whisper.git",
     "clone_repo_to": "/app/Testing",
     "branch": "main",
-    "from_date": "2023-02-13",
+    "from_date": "2022-09-21",
     "to_date": "2025-03-23"
 }
